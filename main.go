@@ -2,8 +2,6 @@ package main
 
 import "os"
 
-const apiBaseURL = "https://www.blockstream.info/api/"
-
 func main() {
 	command := os.Args[1]
 

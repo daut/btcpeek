@@ -1,10 +1,7 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"io"
-	"net/http"
 )
 
 type AddressInfo struct {
@@ -23,24 +20,9 @@ type Stats struct {
 
 func lookupAddress(address string) {
 	println("Looking up address:", address)
-	url := apiBaseURL + "address/" + address
-	resp, err := http.Get(url)
+	addressInfo, err := fetchData[AddressInfo]("address/" + address)
 	if err != nil {
 		println("Error fetching address data:", err.Error())
-		return
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		println("Error: received non-200 response code:", resp.StatusCode)
-		return
-	}
-
-	body, _ := io.ReadAll(resp.Body)
-	var addressInfo AddressInfo
-	err = json.Unmarshal(body, &addressInfo)
-	if err != nil {
-		println("Error parsing JSON response:", err.Error())
 		return
 	}
 

@@ -1,6 +1,9 @@
 package main
 
-import "os"
+import (
+	"github.com/daut/btcpeek/commands"
+	"os"
+)
 
 func main() {
 	command := os.Args[1]
@@ -11,6 +14,12 @@ func main() {
 			println("Usage: btcpeek address <address>")
 			return
 		}
-		lookupAddress(os.Args[2])
+		commands.LookupAddress(os.Args[2])
+	case "tx":
+		if len(os.Args) < 3 {
+			println("Usage: btcpeek tx <txid>")
+			return
+		}
+		commands.LookupTransaction(os.Args[2])
 	}
 }

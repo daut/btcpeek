@@ -1,4 +1,4 @@
-package main
+package clients
 
 import (
 	"encoding/json"
@@ -8,7 +8,7 @@ import (
 
 const apiBaseURL = "https://www.mempool.space/api/"
 
-func fetchData[T any](path string) (*T, error) {
+func FetchData[T any](path string) (*T, error) {
 	url := apiBaseURL + path
 	resp, err := http.Get(url)
 	if err != nil {
@@ -22,7 +22,7 @@ func fetchData[T any](path string) (*T, error) {
 		return nil, err
 	}
 
-	body, _ := io.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}

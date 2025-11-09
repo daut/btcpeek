@@ -21,5 +21,11 @@ func main() {
 			return
 		}
 		commands.LookupTransaction(os.Args[2])
+	case "block":
+		if len(os.Args) < 3 {
+			println("Usage: btcpeek block <blockhash>")
+			return
+		}
+		commands.LookupBlock(os.Args[2])
 	}
 }

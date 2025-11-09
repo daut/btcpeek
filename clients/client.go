@@ -2,6 +2,7 @@ package clients
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 )
@@ -18,8 +19,8 @@ func FetchData[T any](path string) (*T, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		println("Error: received non-200 response code:", resp.StatusCode)
-		return nil, err
+		body, _ := io.ReadAll(resp.Body)
+		return nil, fmt.Errorf("API request failed with status %d: %s", resp.StatusCode, string(body))
 	}
 
 	body, err := io.ReadAll(resp.Body)

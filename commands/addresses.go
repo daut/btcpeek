@@ -2,7 +2,6 @@ package commands
 
 import (
 	"fmt"
-	"github.com/daut/btcpeek/clients"
 )
 
 type AddressInfo struct {
@@ -19,9 +18,10 @@ type Stats struct {
 	TxCount        int64 `json:"tx_count"`
 }
 
-func LookupAddress(address string) {
+func (s *Command) LookupAddress(address string) {
 	fmt.Println("Looking up address:", address)
-	addressInfo, err := clients.FetchData[AddressInfo]("address/" + address)
+	var addressInfo *AddressInfo
+	err := s.FetchData("address/"+address, &addressInfo)
 	if err != nil {
 		println("Error fetching address data:", err.Error())
 		return

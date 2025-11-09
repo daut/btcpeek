@@ -2,8 +2,6 @@ package commands
 
 import (
 	"fmt"
-
-	"github.com/daut/btcpeek/clients"
 )
 
 type BlockInfo struct {
@@ -22,9 +20,10 @@ type BlockInfo struct {
 	Difficulty        float64 `json:"difficulty"`
 }
 
-func LookupBlock(blockHash string) {
+func (s *Command) LookupBlock(blockHash string) {
 	fmt.Println("Looking up block:", blockHash)
-	blockInfo, err := clients.FetchData[BlockInfo]("block/" + blockHash)
+	var blockInfo *BlockInfo
+	err := s.FetchData("block/"+blockHash, &blockInfo)
 	if err != nil {
 		println("Error fetching block data:", err.Error())
 		return
@@ -41,5 +40,5 @@ func LookupBlock(blockHash string) {
 	fmt.Printf("Merkle Root: %s\n", blockInfo.MerkleRoot)
 	fmt.Printf("Previous Block Hash: %s\n", blockInfo.PreviousBlockHash)
 	fmt.Printf("Nonce: %d\n", blockInfo.Nonce)
-	fmt.Printf("Difficulty: %f\n", blockInfo.Difficulty)
+	fmt.Printf("Difficulty: %.2f (%.2e times harder than easiest)\n", blockInfo.Difficulty, blockInfo.Difficulty)
 }

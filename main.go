@@ -1,31 +1,35 @@
 package main
 
 import (
-	"github.com/daut/btcpeek/commands"
 	"os"
+
+	"github.com/daut/btcpeek/clients"
+	"github.com/daut/btcpeek/commands"
 )
 
 func main() {
-	command := os.Args[1]
+	cmd := os.Args[1]
 
-	switch command {
+	c := commands.NewCommands(clients.FetchData)
+
+	switch cmd {
 	case "address":
 		if len(os.Args) < 3 {
 			println("Usage: btcpeek address <address>")
 			return
 		}
-		commands.LookupAddress(os.Args[2])
+		c.LookupAddress(os.Args[2])
 	case "tx":
 		if len(os.Args) < 3 {
 			println("Usage: btcpeek tx <txid>")
 			return
 		}
-		commands.LookupTransaction(os.Args[2])
+		c.LookupTransaction(os.Args[2])
 	case "block":
 		if len(os.Args) < 3 {
 			println("Usage: btcpeek block <blockhash>")
 			return
 		}
-		commands.LookupBlock(os.Args[2])
+		c.LookupBlock(os.Args[2])
 	}
 }

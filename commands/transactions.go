@@ -2,7 +2,6 @@ package commands
 
 import (
 	"fmt"
-	"github.com/daut/btcpeek/clients"
 )
 
 type TransactionInfo struct {
@@ -51,9 +50,10 @@ type Prevout struct {
 	Value               int64  `json:"value"`
 }
 
-func LookupTransaction(txId string) {
+func (s *Command) LookupTransaction(txId string) {
 	fmt.Println("Looking up transaction:", txId)
-	txInfo, err := clients.FetchData[TransactionInfo]("tx/" + txId)
+	var txInfo *TransactionInfo
+	err := s.FetchData("tx/"+txId, &txInfo)
 	if err != nil {
 		println("Error fetching transaction data:", err.Error())
 		return

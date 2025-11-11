@@ -5,12 +5,12 @@ import (
 )
 
 type AddressInfo struct {
-	Address      string `json:"address"`
-	ChainStats   Stats  `json:"chain_stats"`
-	MempoolStats Stats  `json:"mempool_stats"`
+	Address      string       `json:"address"`
+	ChainStats   AddressStats `json:"chain_stats"`
+	MempoolStats AddressStats `json:"mempool_stats"`
 }
 
-type Stats struct {
+type AddressStats struct {
 	FundedTxoCount int64 `json:"funded_txo_count"`
 	FundedTxoSum   int64 `json:"funded_txo_sum"`
 	SpentTxoCount  int64 `json:"spent_txo_count"`

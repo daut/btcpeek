@@ -5,26 +5,26 @@ import (
 )
 
 type TransactionInfo struct {
-	TxId     string `json:"txid"`
-	Version  int    `json:"version"`
-	LockTime int    `json:"locktime"`
-	Size     int    `json:"size"`
-	Weight   int    `json:"weight"`
-	SigOps   int    `json:"sigops"`
-	Fee      int64  `json:"fee"`
-	Status   Status `json:"status"`
-	Vins     []Vin  `json:"vin"`
-	Vouts    []Vout `json:"vout"`
+	TxId     string            `json:"txid"`
+	Version  int               `json:"version"`
+	LockTime int               `json:"locktime"`
+	Size     int               `json:"size"`
+	Weight   int               `json:"weight"`
+	SigOps   int               `json:"sigops"`
+	Fee      int64             `json:"fee"`
+	Status   TransactionStatus `json:"status"`
+	Vins     []TransactionVin  `json:"vin"`
+	Vouts    []TransactionVout `json:"vout"`
 }
 
-type Status struct {
+type TransactionStatus struct {
 	Confirmed   bool   `json:"confirmed"`
 	BlockHeight int    `json:"block_height"`
 	BlockHash   string `json:"block_hash"`
 	BlockTime   int64  `json:"block_time"`
 }
 
-type Vin struct {
+type TransactionVin struct {
 	TxId         string  `json:"txid"`
 	Vout         int     `json:"vout"`
 	Prevout      Prevout `json:"prevout"`
@@ -34,7 +34,7 @@ type Vin struct {
 	Sequence     int64   `json:"sequence"`
 }
 
-type Vout struct {
+type TransactionVout struct {
 	Scriptpubkey        string `json:"scriptpubkey"`
 	ScriptpubkeyAsm     string `json:"scriptpubkey_asm"`
 	ScriptpubkeyType    string `json:"scriptpubkey_type"`

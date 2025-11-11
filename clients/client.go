@@ -5,12 +5,14 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 )
 
 const apiBaseURL = "https://www.mempool.space/api/"
 
 func FetchData(path string, dest any) error {
-	url := apiBaseURL + path
+	url := getAPIBaseURL() + path
+	fmt.Printf("Fetching data from URL: %s\n", url)
 	resp, err := http.Get(url)
 	if err != nil {
 		println("Error fetching address data:", err.Error())
@@ -24,4 +26,11 @@ func FetchData(path string, dest any) error {
 	}
 
 	return json.NewDecoder(resp.Body).Decode(dest)
+}
+
+func getAPIBaseURL() string {
+	if url := os.Getenv("API_BASE_URL"); url != "" {
+		return url
+	}
+	return apiBaseURL
 }

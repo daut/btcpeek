@@ -91,6 +91,17 @@ func TestRun(t *testing.T) {
 			}
 		})
 	})
+
+	t.Run("invalid command", func(t *testing.T) {
+		output := captureOutput(func() {
+			args := []string{"btcpeek", "invalidcmd"}
+			run(args)
+		})
+
+		if !strings.Contains(output, "Usage: btcpeek <command> [arguments]") {
+			t.Errorf("expected output to show usage info for invalid command, got: %s", output)
+		}
+	})
 }
 
 func createMockApi() *httptest.Server {

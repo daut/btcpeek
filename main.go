@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/daut/btcpeek/clients"
@@ -15,23 +16,33 @@ func run(args []string) {
 	switch cmd {
 	case "address":
 		if len(args) < 3 {
-			println("Usage: btcpeek address <address>")
+			fmt.Println("Usage: btcpeek address <address>")
 			return
 		}
 		c.LookupAddress(args[2])
 	case "tx":
 		if len(args) < 3 {
-			println("Usage: btcpeek tx <txid>")
+			fmt.Println("Usage: btcpeek tx <txid>")
 			return
 		}
 		c.LookupTransaction(args[2])
 	case "block":
 		if len(args) < 3 {
-			println("Usage: btcpeek block <blockhash>")
+			fmt.Println("Usage: btcpeek block <blockhash>")
 			return
 		}
 		c.LookupBlock(args[2])
+	default:
+		printUsage()
 	}
+}
+
+func printUsage() {
+	fmt.Println("Usage: btcpeek <command> [arguments]")
+	fmt.Println("Commands:")
+	fmt.Println("  address <address>   Lookup Bitcoin address information")
+	fmt.Println("  tx <txid>          Lookup Bitcoin transaction information")
+	fmt.Println("  block <blockhash>  Lookup Bitcoin block information")
 }
 
 func main() {

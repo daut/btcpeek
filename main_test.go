@@ -92,6 +92,23 @@ func TestRun(t *testing.T) {
 		})
 	})
 
+	t.Run("latest command", func(t *testing.T) {
+		t.Run("fetch latest blocks", func(t *testing.T) {
+			mockApi := createMockApi()
+			defer mockApi.Close()
+
+			output := captureOutput(func() {
+				os.Setenv("API_BASE_URL", mockApi.URL+"/")
+				args := []string{"btcpeek", "latest"}
+				run(args)
+			})
+
+			if !strings.Contains(output, "Block Height: 700002") {
+				t.Errorf("expected output to contain latest block height info, got: %s", output)
+			}
+		})
+	})
+
 	t.Run("help/invalid command", func(t *testing.T) {
 		commands := []string{"help", "invalidcmd"}
 		for _, cmd := range commands {
@@ -126,6 +143,22 @@ func createMockApi() *httptest.Server {
 					SpentTxoCount:  0,
 					SpentTxoSum:    0,
 					TxCount:        0,
+				},
+			})
+		} else if strings.Contains(r.URL.Path, "/blocks") {
+			w.WriteHeader(200)
+			json.NewEncoder(w).Encode([]commands.BlockInfo{
+				{
+					Id:        "0000000000000000000sampleblockhash1",
+					Height:    700002,
+					Timestamp: 1617182920,
+					TxCount:   2000,
+				},
+				{
+					Id:        "0000000000000000000sampleblockhash2",
+					Height:    700001,
+					Timestamp: 1617182420,
+					TxCount:   1800,
 				},
 			})
 		} else if strings.Contains(r.URL.Path, "/block") {

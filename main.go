@@ -32,6 +32,8 @@ func run(args []string) {
 			return
 		}
 		c.LookupBlock(args[2])
+	case "latest":
+		c.LookupLatestBlocks()
 	case "help":
 		printUsage()
 	default:

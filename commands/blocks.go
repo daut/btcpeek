@@ -42,3 +42,19 @@ func (s *Command) LookupBlock(blockHash string) {
 	fmt.Printf("Nonce: %d\n", blockInfo.Nonce)
 	fmt.Printf("Difficulty: %.2f (%.2e times harder than easiest)\n", blockInfo.Difficulty, blockInfo.Difficulty)
 }
+
+func (s *Command) LookupLatestBlocks() {
+	fmt.Println("Looking up latest blocks.")
+	var latestBlocks []BlockInfo
+	err := s.FetchData("blocks/", &latestBlocks)
+	if err != nil {
+		println("Error fetching latest blocks:", err.Error())
+		return
+	}
+
+	fmt.Println("=================================")
+	for _, blockInfo := range latestBlocks {
+		fmt.Printf("Block Height: %d, Hash: %s, Timestamp: %d, Tx Count: %d\n",
+			blockInfo.Height, blockInfo.Id, blockInfo.Timestamp, blockInfo.TxCount)
+	}
+}

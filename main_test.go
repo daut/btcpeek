@@ -92,25 +92,17 @@ func TestRun(t *testing.T) {
 		})
 	})
 
-	t.Run("invalid command", func(t *testing.T) {
-		output := captureOutput(func() {
-			args := []string{"btcpeek", "invalidcmd"}
-			run(args)
-		})
+	t.Run("help/invalid command", func(t *testing.T) {
+		commands := []string{"help", "invalidcmd"}
+		for _, cmd := range commands {
+			output := captureOutput(func() {
+				args := []string{"btcpeek", cmd}
+				run(args)
+			})
 
-		if !strings.Contains(output, "Usage: btcpeek <command> [arguments]") {
-			t.Errorf("expected output to show usage info for invalid command, got: %s", output)
-		}
-	})
-
-	t.Run("help command", func(t *testing.T) {
-		output := captureOutput(func() {
-			args := []string{"btcpeek", "help"}
-			run(args)
-		})
-
-		if !strings.Contains(output, "Usage: btcpeek <command> [arguments]") {
-			t.Errorf("expected output to show usage info for help command, got: %s", output)
+			if !strings.Contains(output, "Usage: btcpeek <command> [arguments]") {
+				t.Errorf("expected output to show usage info for %s command, got: %s", cmd, output)
+			}
 		}
 	})
 }

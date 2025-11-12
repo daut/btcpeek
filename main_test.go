@@ -102,6 +102,17 @@ func TestRun(t *testing.T) {
 			t.Errorf("expected output to show usage info for invalid command, got: %s", output)
 		}
 	})
+
+	t.Run("help command", func(t *testing.T) {
+		output := captureOutput(func() {
+			args := []string{"btcpeek", "help"}
+			run(args)
+		})
+
+		if !strings.Contains(output, "Usage: btcpeek <command> [arguments]") {
+			t.Errorf("expected output to show usage info for help command, got: %s", output)
+		}
+	})
 }
 
 func createMockApi() *httptest.Server {

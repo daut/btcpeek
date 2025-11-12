@@ -32,6 +32,8 @@ func run(args []string) {
 			return
 		}
 		c.LookupBlock(args[2])
+	case "help":
+		printUsage()
 	default:
 		printUsage()
 	}
@@ -41,8 +43,9 @@ func printUsage() {
 	fmt.Println("Usage: btcpeek <command> [arguments]")
 	fmt.Println("Commands:")
 	fmt.Println("  address <address>   Lookup Bitcoin address information")
-	fmt.Println("  tx <txid>          Lookup Bitcoin transaction information")
-	fmt.Println("  block <blockhash>  Lookup Bitcoin block information")
+	fmt.Println("  tx <txid>           Lookup Bitcoin transaction information")
+	fmt.Println("  block <blockhash>   Lookup Bitcoin block information")
+	fmt.Println("  help                Show this help message")
 }
 
 func main() {

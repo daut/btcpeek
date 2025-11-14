@@ -2,6 +2,8 @@ package commands
 
 import (
 	"fmt"
+
+	"github.com/daut/btcpeek/utils"
 )
 
 type BlockInfo struct {
@@ -33,7 +35,7 @@ func (s *Command) LookupBlock(blockHash string) {
 	fmt.Printf("Block Hash: %s\n", blockInfo.Id)
 	fmt.Println("=================================")
 	fmt.Printf("Height: %d\n", blockInfo.Height)
-	fmt.Printf("Timestamp: %d\n", blockInfo.Timestamp)
+	fmt.Printf("Timestamp: %s (%s)\n", utils.FormatIso8601(blockInfo.Timestamp), utils.TimeAgo(blockInfo.Timestamp))
 	fmt.Printf("Transaction Count: %d\n", blockInfo.TxCount)
 	fmt.Printf("Size: %d bytes\n", blockInfo.Size)
 	fmt.Printf("Weight: %d WU\n", blockInfo.Weight)
@@ -54,7 +56,7 @@ func (s *Command) LookupLatestBlocks() {
 
 	fmt.Println("=================================")
 	for _, blockInfo := range latestBlocks {
-		fmt.Printf("Block Height: %d, Hash: %s, Timestamp: %d, Tx Count: %d\n",
-			blockInfo.Height, blockInfo.Id, blockInfo.Timestamp, blockInfo.TxCount)
+		fmt.Printf("Block Height: %d, Hash: %s, Timestamp: %s (%s), Tx Count: %d\n",
+			blockInfo.Height, blockInfo.Id, utils.FormatIso8601(blockInfo.Timestamp), utils.TimeAgo(blockInfo.Timestamp), blockInfo.TxCount)
 	}
 }

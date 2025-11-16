@@ -6,13 +6,18 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"time"
 )
 
 const apiBaseURL = "https://www.mempool.space/api/"
 
+var httpClient = &http.Client{
+	Timeout: 30 * time.Second,
+}
+
 func FetchData(path string, dest any) error {
 	url := getAPIBaseURL() + path
-	resp, err := http.Get(url)
+	resp, err := httpClient.Get(url)
 	if err != nil {
 		println("Error fetching address data:", err.Error())
 		return err

@@ -12,7 +12,6 @@ const apiBaseURL = "https://www.mempool.space/api/"
 
 func FetchData(path string, dest any) error {
 	url := getAPIBaseURL() + path
-	fmt.Printf("Fetching data from URL: %s\n", url)
 	resp, err := http.Get(url)
 	if err != nil {
 		println("Error fetching address data:", err.Error())

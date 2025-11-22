@@ -25,7 +25,7 @@ type BlockInfo struct {
 func (s *Command) LookupBlock(blockHash string) {
 	fmt.Println("Looking up block:", blockHash)
 	var blockInfo *BlockInfo
-	err := s.FetchData("block/"+blockHash, &blockInfo)
+	err := s.client.FetchData("block/"+blockHash, &blockInfo)
 	if err != nil {
 		println("Error fetching block data:", err.Error())
 		return
@@ -48,7 +48,7 @@ func (s *Command) LookupBlock(blockHash string) {
 func (s *Command) LookupLatestBlocks() {
 	fmt.Println("Looking up latest blocks.")
 	var latestBlocks []BlockInfo
-	err := s.FetchData("blocks/", &latestBlocks)
+	err := s.client.FetchData("blocks/", &latestBlocks)
 	if err != nil {
 		println("Error fetching latest blocks:", err.Error())
 		return

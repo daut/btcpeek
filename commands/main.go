@@ -1,11 +1,15 @@
 package commands
 
-type Command struct {
-	FetchData FetchDataFunc
+type Client interface {
+	FetchData(path string, dest any) error
 }
 
-type FetchDataFunc func(endpoint string, dest any) error
+type Command struct {
+	client Client
+}
 
-func NewCommands(fetchData FetchDataFunc) *Command {
-	return &Command{FetchData: fetchData}
+func NewCommands(client Client) *Command {
+	return &Command{
+		client: client,
+	}
 }

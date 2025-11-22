@@ -5,18 +5,27 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"os"
 	"time"
-)
 
-const apiBaseURL = "https://www.mempool.space/api/"
+	"github.com/daut/btcpeek/config"
+)
 
 var httpClient = &http.Client{
 	Timeout: 30 * time.Second,
 }
 
-func FetchData(path string, dest any) error {
-	url := getAPIBaseURL() + path
+type Client struct {
+	config *config.Config
+}
+
+func NewClient(config *config.Config) *Client {
+	return &Client{
+		config: config,
+	}
+}
+
+func (c *Client) FetchData(path string, dest any) error {
+	url := c.config.ApiBaseURL + path
 	resp, err := httpClient.Get(url)
 	if err != nil {
 		println("Error fetching address data:", err.Error())
@@ -30,11 +39,4 @@ func FetchData(path string, dest any) error {
 	}
 
 	return json.NewDecoder(resp.Body).Decode(dest)
-}
-
-func getAPIBaseURL() string {
-	if url := os.Getenv("API_BASE_URL"); url != "" {
-		return url
-	}
-	return apiBaseURL
 }

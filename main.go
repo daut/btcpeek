@@ -6,12 +6,21 @@ import (
 
 	"github.com/daut/btcpeek/clients"
 	"github.com/daut/btcpeek/commands"
+	"github.com/daut/btcpeek/config"
 )
 
 func run(args []string) {
 	cmd := args[1]
 
-	c := commands.NewCommands(clients.FetchData)
+	config, err := config.NewConfig()
+	if err != nil {
+		fmt.Println("Error loading config:", err)
+		return
+	}
+
+	client := clients.NewClient(config)
+
+	c := commands.NewCommands(client)
 
 	switch cmd {
 	case "address":

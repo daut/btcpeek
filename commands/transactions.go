@@ -53,7 +53,7 @@ type Prevout struct {
 func (s *Command) LookupTransaction(txId string) {
 	fmt.Println("Looking up transaction:", txId)
 	var txInfo *TransactionInfo
-	err := s.FetchData("tx/"+txId, &txInfo)
+	err := s.client.FetchData("tx/"+txId, &txInfo)
 	if err != nil {
 		println("Error fetching transaction data:", err.Error())
 		return

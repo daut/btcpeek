@@ -37,7 +37,7 @@ func TestRun(t *testing.T) {
 			defer mockApi.Close()
 
 			output := utils.CaptureOutput(func() {
-				os.Setenv("API_BASE_URL", mockApi.URL+"/")
+				os.Setenv("BTCPEEK_API_BASE_URL", mockApi.URL+"/")
 				args := []string{"btcpeek", "tx", "sampletxid"}
 				run(args)
 			})
@@ -58,7 +58,7 @@ func TestRun(t *testing.T) {
 			defer mockApi.Close()
 
 			output := utils.CaptureOutput(func() {
-				os.Setenv("API_BASE_URL", mockApi.URL+"/")
+				os.Setenv("BTCPEEK_API_BASE_URL", mockApi.URL+"/")
 				args := []string{"btcpeek", "block", "000000000000000015dc777b3ff2611091336355d3f0ee9766a2cf3be8e4b1ce"}
 				run(args)
 			})
@@ -79,7 +79,7 @@ func TestRun(t *testing.T) {
 			defer mockApi.Close()
 
 			output := utils.CaptureOutput(func() {
-				os.Setenv("API_BASE_URL", mockApi.URL+"/")
+				os.Setenv("BTCPEEK_API_BASE_URL", mockApi.URL+"/")
 				args := []string{"btcpeek", "latest"}
 				run(args)
 			})

@@ -21,7 +21,7 @@ type AddressStats struct {
 func (s *Command) LookupAddress(address string) {
 	fmt.Println("Looking up address:", address)
 	var addressInfo *AddressInfo
-	err := s.FetchData("address/"+address, &addressInfo)
+	err := s.client.FetchData("address/"+address, &addressInfo)
 	if err != nil {
 		println("Error fetching address data:", err.Error())
 		return

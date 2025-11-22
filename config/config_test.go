@@ -9,57 +9,74 @@ import (
 
 func TestNewConfig(t *testing.T) {
 	tests := []struct {
-		name          string
-		configContent map[string]string
-		expected      *Config
+		name     string
+		setup    func()
+		expected *Config
 	}{
 		{
-			name:          "returns default config when no config file exists",
-			configContent: nil,
+			name:  "returns default config when no config file exists",
+			setup: func() {},
 			expected: &Config{
-				ApiBaseURL: "https://www.mempool.space/api/",
-				ClientType: "api",
+				ApiBaseURL: DefaultApiBaseURL,
+				ClientType: DefaultClientType,
 			},
 		},
 		{
 			name: "partially overrides defaults",
-			configContent: map[string]string{
-				"apiBaseUrl": "https://www.custom.api/",
+			setup: func() {
+				configPath := createFakeConfFile(t, map[string]string{
+					"apiBaseUrl": "https://www.custom.api/",
+				})
+				originalGetConfigPath := getConfigPath
+				getConfigPath = func() string { return configPath }
+				t.Cleanup(func() { getConfigPath = originalGetConfigPath })
 			},
 			expected: &Config{
 				ApiBaseURL: "https://www.custom.api/",
-				ClientType: "api",
+				ClientType: DefaultClientType,
 			},
 		},
 		{
 			name: "fully overrides defaults",
-			configContent: map[string]string{
-				"apiBaseUrl": "https://localhost:8332",
-				"clientType": "rpc",
+			setup: func() {
+				configPath := createFakeConfFile(t, map[string]string{
+					"apiBaseUrl": "https://localhost:8332",
+					"clientType": "rpc",
+				})
+				originalGetConfigPath := getConfigPath
+				getConfigPath = func() string { return configPath }
+				t.Cleanup(func() { getConfigPath = originalGetConfigPath })
 			},
 			expected: &Config{
 				ApiBaseURL: "https://localhost:8332",
 				ClientType: "rpc",
 			},
 		},
+		{
+			name: "env var overrides config",
+			setup: func() {
+				configPath := createFakeConfFile(t, nil)
+				t.Setenv("BTCPEEK_API_BASE_URL", "https://env.localhost:8332")
+				t.Setenv("BTCPEEK_CLIENT_TYPE", "envrpc")
+				originalGetConfigPath := getConfigPath
+				getConfigPath = func() string { return configPath }
+				t.Cleanup(func() { getConfigPath = originalGetConfigPath })
+			},
+			expected: &Config{
+				ApiBaseURL: "https://env.localhost:8332",
+				ClientType: "envrpc",
+			},
+		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			var configPath string
-			if tt.configContent != nil {
-				tempDir := t.TempDir()
-				configPath = filepath.Join(tempDir, "config.json")
-				data, _ := json.Marshal(tt.configContent)
-				os.WriteFile(configPath, data, 0644)
+			tt.setup()
+			config, err := NewConfig()
 
-				originalGetConfigPath := getConfigPath
-				getConfigPath = func() string { return configPath }
-				t.Cleanup(func() { getConfigPath = originalGetConfigPath })
+			if err != nil {
+				t.Errorf("expected nil, got %s error", err)
 			}
-
-			config := NewConfig()
-
 			if config.ApiBaseURL != tt.expected.ApiBaseURL {
 				t.Errorf("expected ApiBaseURL %s, got %s", tt.expected.ApiBaseURL, config.ApiBaseURL)
 			}
@@ -68,4 +85,15 @@ func TestNewConfig(t *testing.T) {
 			}
 		})
 	}
+}
+
+func createFakeConfFile(t *testing.T, content map[string]string) string {
+	if content == nil {
+		content = make(map[string]string)
+	}
+	tempDir := t.TempDir()
+	configPath := filepath.Join(tempDir, "config.json")
+	data, _ := json.Marshal(content)
+	os.WriteFile(configPath, data, 0644)
+	return configPath
 }

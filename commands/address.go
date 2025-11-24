@@ -2,6 +2,8 @@ package commands
 
 import (
 	"fmt"
+
+	"github.com/daut/btcpeek/utils"
 )
 
 type AddressInfo struct {
@@ -27,14 +29,17 @@ func (s *Command) LookupAddress(address string) {
 		return
 	}
 
-	balance := addressInfo.ChainStats.FundedTxoSum - addressInfo.ChainStats.SpentTxoSum
+	balance := utils.PrettyPrintSats(utils.CalculateBalance(addressInfo.ChainStats.FundedTxoSum, addressInfo.ChainStats.SpentTxoSum), "en-US")
+	totalReceived := utils.PrettyPrintSats(addressInfo.ChainStats.FundedTxoSum, "en-US")
+	totalSpent := utils.PrettyPrintSats(addressInfo.ChainStats.SpentTxoSum, "en-US")
+	transactionCount := utils.FormatNumber(addressInfo.ChainStats.TxCount, "en-US")
 
 	fmt.Println("=================================")
 	fmt.Printf("Address: %s\n", addressInfo.Address)
 	fmt.Println("=================================")
-	fmt.Printf("Balance: %d sats\n", balance)
-	fmt.Printf("Total Received: %d sats\n", addressInfo.ChainStats.FundedTxoSum)
-	fmt.Printf("Total Spent: %d sats\n", addressInfo.ChainStats.SpentTxoSum)
-	fmt.Printf("Transaction Count: %d\n", addressInfo.ChainStats.TxCount)
+	fmt.Printf("Balance: %s\n", balance)
+	fmt.Printf("Total Received: %s\n", totalReceived)
+	fmt.Printf("Total Spent: %s\n", totalSpent)
+	fmt.Printf("Transaction Count: %s\n", transactionCount)
 	fmt.Println("=================================")
 }

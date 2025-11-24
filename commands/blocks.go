@@ -31,12 +31,14 @@ func (s *Command) LookupBlock(blockHash string) {
 		return
 	}
 
+	transactionCount := utils.FormatNumber(int64(blockInfo.TxCount), "en-US")
+
 	fmt.Println("=================================")
 	fmt.Printf("Block Hash: %s\n", blockInfo.Id)
 	fmt.Println("=================================")
 	fmt.Printf("Height: %d\n", blockInfo.Height)
 	fmt.Printf("Timestamp: %s (%s)\n", utils.FormatIso8601(blockInfo.Timestamp), utils.TimeAgo(blockInfo.Timestamp))
-	fmt.Printf("Transaction Count: %d\n", blockInfo.TxCount)
+	fmt.Printf("Transaction Count: %s\n", transactionCount)
 	fmt.Printf("Size: %d bytes\n", blockInfo.Size)
 	fmt.Printf("Weight: %d WU\n", blockInfo.Weight)
 	fmt.Printf("Merkle Root: %s\n", blockInfo.MerkleRoot)

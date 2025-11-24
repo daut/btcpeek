@@ -16,7 +16,7 @@ func TestRun(t *testing.T) {
 			defer mockApi.Close()
 
 			output := utils.CaptureOutput(func() {
-				os.Setenv("API_BASE_URL", mockApi.URL+"/")
+				os.Setenv("BTCPEEK_API_BASE_URL", mockApi.URL+"/")
 				args := []string{"btcpeek", "address", "1wiz18xYmhRX6xStj2b9t1rwWX4GKUgpv"}
 				run(args)
 			})
@@ -25,7 +25,7 @@ func TestRun(t *testing.T) {
 				t.Errorf("expected output to contain address info, got: %s", output)
 			}
 
-			if !strings.Contains(output, "Balance: 87909 sats") {
+			if !strings.Contains(output, "Balance: 87,909 sats") {
 				t.Errorf("expected output to contain balance info, got: %s", output)
 			}
 		})

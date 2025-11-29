@@ -10,6 +10,15 @@ import (
 )
 
 func run(args []string) {
+	if len(args) < 2 {
+		err := commands.NewTUI()
+		if err != nil {
+			fmt.Println("Error starting TUI:", err)
+			os.Exit(1)
+		}
+		return
+	}
+
 	cmd := args[1]
 
 	config, err := config.NewConfig()

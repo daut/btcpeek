@@ -31,7 +31,8 @@ func (m model) View() string {
 }
 
 func NewTUI() error {
-	_, err := tea.NewProgram(model{}).Run()
+	opts := tea.WithAltScreen()
+	_, err := tea.NewProgram(model{}, opts).Run()
 	if err != nil {
 		return err
 	}
